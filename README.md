@@ -21,17 +21,24 @@ Python (pandas), Google Colab
 - Parsed the nested JSON for all 745 rows and extracted structured fields, including `priority` and `sla_plan`
 - Found `sla_plan` contained **281 inconsistent text variants** of what should be a handful of categories (e.g. `"Standard"`, `"standard"`, `"Standard Business Hours"`, `"BusinessHours"` all referring to the same plan)
 - Cleaned and standardized these into 4 real categories — **Standard, Gold, Enterprise/24x7, Other** — using text normalization and keyword-based rules
-- Priority levels are nearly evenly split: **medium (254), high (249), low (242)**
+- Analyzed the free-text `root_cause` field and built a 9-category classification (Identity/Authentication, Certificates, Device Compliance/MDM, Driver/Printer, Endpoint Security, DNS/Network, Email/Sync, API/Integration, Access/Permission) using keyword-based rules, reducing unclassified rows to under 3%
+- Built visualizations for ticket priority distribution, root cause category distribution, and SLA category by priority
 
-## In progress / next steps
+## Key findings
 
-- [ ] Cross-tabulate `priority` against `sla_category` to check for mismatches (e.g. high-priority tickets not getting faster SLA plans)
+- **Priority is nearly evenly split:** medium (254), high (249), low (242) — no major skew.
+- **SLA assignment is broadly priority-aware:** 41% of high-priority tickets received an expedited SLA plan (Gold or Enterprise/24x7), versus just 2-4% of medium/low priority tickets. However, 51% of high-priority tickets still received only a Standard SLA — worth flagging as a possible inconsistency in how "high priority" is applied.
+- **Gold-tier SLA is reserved almost exclusively for urgent issues:** 91% of Gold SLA tickets (71 of 78) are high-priority.
+- **Identity/Authentication (159 tickets, ~21%) and Certificates (157 tickets, ~21%) are the two dominant root causes**, together accounting for over 40% of all incidents — well ahead of Device Compliance/MDM, Driver/Printer, and Endpoint Security (each ~75-80 tickets). This suggests self-service password/MFA recovery and proactive certificate renewal monitoring would likely reduce ticket volume more than addressing any other single issue type.
+- **Root cause category showed little relationship with priority** — most categories were evenly split across high/medium/low (roughly 30-40% each), suggesting priority is driven more by business impact or user role than by the technical nature of the issue.
+
+## Next steps
+
 - [ ] Extract and analyze device/environment fields (OS, platform, region)
-- [ ] Analyze `root_cause` text for recurring failure themes
-- [ ] Add visualizations (priority distribution, SLA category breakdown, mismatch analysis)
-- [ ] Write up final findings and recommendations
+- [ ] Join with `user_directory.csv` for a user/department-level view
+- [ ] Finalize recommendations section
 
 ## Why this project
-
 Most IT ticket datasets are already clean. This one wasn't — it required parsing nested JSON and reconciling messy, human-entered categorical data, which reflects the kind of real-world data cleaning work analysts actually do, not just polished example datasets.
 
+Most IT ticket datasets are already clean. This one wasn't — it required parsing nested JSON and reconciling messy, human-entered categorical data, which reflects the kind of real-world data cleaning work analysts actually do, not just polished example datasets.
