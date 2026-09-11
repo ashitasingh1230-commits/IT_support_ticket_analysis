@@ -32,13 +32,20 @@ Python (pandas), Google Colab
 - **Identity/Authentication (159 tickets, ~21%) and Certificates (157 tickets, ~21%) are the two dominant root causes**, together accounting for over 40% of all incidents — well ahead of Device Compliance/MDM, Driver/Printer, and Endpoint Security (each ~75-80 tickets). This suggests self-service password/MFA recovery and proactive certificate renewal monitoring would likely reduce ticket volume more than addressing any other single issue type.
 - **Root cause category showed little relationship with priority** — most categories were evenly split across high/medium/low (roughly 30-40% each), suggesting priority is driven more by business impact or user role than by the technical nature of the issue.
 
+## Environment field cleaning
+
+The nested `environment` object (OS, platform, region, user group) was similarly inconsistent and required cleaning:
+
+- **OS** (101 raw variants → 8 categories): Windows Desktop (338), Unknown/missing (181, ~24% of tickets had no OS recorded), iOS (68), Windows Server (66), Mixed (42), Linux/macOS (32), Other (10), Android (8).
+- **Region** (84 raw variants → 8 categories): US-East dominates (451, ~60%), followed by EMEA (115) and US-West (79). Only 22 rows (~3%) remained uncategorized.
+- **Platform** (296 raw variants → 7 categories): this field mixed several unrelated concepts (device type, hosting location, infrastructure type, network software) rather than one consistent idea, which limited how far categorization could go — 161 rows (~22%) remained in "Other." This is reported as a genuine data quality limitation rather than an analysis gap.
+- **User Group** (207 raw variants → 8 categories): Sales (264, ~35%), Internal/General Staff (174), Finance (92), Engineering (76), Other (75), Remote Workers (27), Marketing (20), Application Support (17). Sales tickets dominate the dataset, so department-level comparisons should account for this volume imbalance rather than being read as "Sales has more problems."
+
 ## Next steps
 
-- [ ] Extract and analyze device/environment fields (OS, platform, region)
 - [ ] Join with `user_directory.csv` for a user/department-level view
 - [ ] Finalize recommendations section
 
 ## Why this project
 Most IT ticket datasets are already clean. This one wasn't — it required parsing nested JSON and reconciling messy, human-entered categorical data, which reflects the kind of real-world data cleaning work analysts actually do, not just polished example datasets.
-
 Most IT ticket datasets are already clean. This one wasn't — it required parsing nested JSON and reconciling messy, human-entered categorical data, which reflects the kind of real-world data cleaning work analysts actually do, not just polished example datasets.
