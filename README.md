@@ -62,6 +62,6 @@ Based on the findings above, if I were presenting this to an IT operations manag
 `user_directory.csv` was explored as a potential join to enrich tickets with official department/user data. However, tickets did not contain a clean username or email field — the only identifying information was occasionally embedded inside free-text correspondence messages, which would require regex-based extraction with partial (not guaranteed) coverage across all 745 tickets. Given that `user_group_category` (derived directly from ticket data) already provides department-level insight, this join was deliberately scoped out rather than pursued for a partial, low-confidence match. A future iteration could revisit this with regex-based email extraction.
 
 ## Why this project
-Most IT ticket datasets are already clean. This one wasn't — it required parsing nested JSON and reconciling messy, human-entered categorical data, which reflects the kind of real-world data cleaning work analysts actually do, not just polished example datasets.
+
 
 Most IT ticket datasets are already clean. This one wasn't — it required parsing nested JSON and reconciling messy, human-entered categorical data, which reflects the kind of real-world data cleaning work analysts actually do, not just polished example datasets.
