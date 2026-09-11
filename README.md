@@ -41,9 +41,21 @@ The nested `environment` object (OS, platform, region, user group) was similarly
 - **Platform** (296 raw variants → 7 categories): this field mixed several unrelated concepts (device type, hosting location, infrastructure type, network software) rather than one consistent idea, which limited how far categorization could go — 161 rows (~22%) remained in "Other." This is reported as a genuine data quality limitation rather than an analysis gap.
 - **User Group** (207 raw variants → 8 categories): Sales (264, ~35%), Internal/General Staff (174), Finance (92), Engineering (76), Other (75), Remote Workers (27), Marketing (20), Application Support (17). Sales tickets dominate the dataset, so department-level comparisons should account for this volume imbalance rather than being read as "Sales has more problems."
 
+## Recommendations
+
+Based on the findings above, if I were presenting this to an IT operations manager:
+
+1. **Invest in self-service password/MFA recovery.** Identity/Authentication is the single largest root cause category (21% of all tickets). A self-service reset flow that handles the common case — password reset causing device re-authentication failures — would likely cut this category significantly, since several of these tickets stemmed from stale cached credentials on mobile devices rather than genuinely new problems.
+
+2. **Add proactive certificate expiration monitoring.** Certificates are tied with Identity/Authentication as the top root cause (21%). Several cases showed the same pattern: a certificate expired before renewal, and monitoring/alerting didn't catch it in time. Automated expiration alerts 30/14/7 days out would likely prevent a meaningful share of these tickets before they become incidents.
+
+3. **Audit how "high priority" is assigned.** 51% of high-priority tickets still only received a Standard SLA, not an expedited one. Either the priority field is being set inconsistently, or "high priority" doesn't reliably mean "needs faster response" in the current process — worth a follow-up conversation with the team to align the two.
+
+4. **Clean up how environment/platform data is captured at ticket submission.** The `platform` field mixed device type, hosting location, and software into one inconsistent free-text field, and `os` was missing in ~24% of tickets. Standardizing this at intake (e.g. dropdowns instead of free text) would make future analysis far more reliable, and would help correlate incidents with specific device/OS patterns.
+
 ## Next steps
 
-- [ ] Finalize recommendations section
+- [x] Finalize recommendations section
 
 ## Scope note
 
@@ -51,4 +63,5 @@ The nested `environment` object (OS, platform, region, user group) was similarly
 
 ## Why this project
 Most IT ticket datasets are already clean. This one wasn't — it required parsing nested JSON and reconciling messy, human-entered categorical data, which reflects the kind of real-world data cleaning work analysts actually do, not just polished example datasets.
+
 Most IT ticket datasets are already clean. This one wasn't — it required parsing nested JSON and reconciling messy, human-entered categorical data, which reflects the kind of real-world data cleaning work analysts actually do, not just polished example datasets.
